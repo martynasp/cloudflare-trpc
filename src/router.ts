@@ -34,6 +34,7 @@ const postRouter = router({
 export const appRouter = router({
   post: postRouter,
   hello: publicProcedure.input(z.string().nullish()).query(({ input }) => {
+    console.log('Hello Input:', input);
     return `hello ${input ?? 'world'}`;
   }),
 });
