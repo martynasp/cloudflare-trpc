@@ -11,8 +11,17 @@
 import { fetchRequestHandler } from '@trpc/server/adapters/fetch';
 import { WorkerEntrypoint } from 'cloudflare:workers';
 import { appRouter } from './router';
+import { instrument, ResolveConfigFn } from '@microlabs/otel-cf-workers';
 
-export default class TRPCCloudflareWorkerExample extends WorkerEntrypoint {
+const config: ResolveConfigFn = (env: {}, _trigger) => {
+	return {
+    exporter: {} as any,
+		service: { name: 'greetings', spanAttributeMappings: { 'http.route': 'cf.worker.route' } },
+	}
+}
+
+
+const handler = {
   async fetch(request: Request): Promise<Response> {
     return fetchRequestHandler({
       endpoint: '/',
@@ -22,3 +31,6 @@ export default class TRPCCloudflareWorkerExample extends WorkerEntrypoint {
     });
   }
 }
+
+export default instrument(handler, config)
+
