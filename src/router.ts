@@ -1,5 +1,6 @@
 import { initTRPC } from '@trpc/server';
 import { z } from 'zod';
+import { trace } from '@opentelemetry/api'
 
 let id = 0;
 
@@ -36,6 +37,14 @@ export const appRouter = router({
   hello: publicProcedure.input(z.string().nullish()).query(({ input }) => {
     console.log('Hello Input:', input);
     return `hello ${input ?? 'world'}`;
+  }),
+  "": publicProcedure.input(z.string().nullish()).query(({ input }) => {
+    trace.getTracer('default').startActiveSpan('rootHandler', span => {
+      span.setAttribute('custom-attribute', 'custom-value');
+      console.log('Hello Input:', input);
+      span.end();
+    });
+    return `root`;
   }),
 });
 

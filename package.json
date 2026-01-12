@@ -8,6 +8,7 @@
     "test-dev": "start-server-and-test 'wrangler dev --local' http://127.0.0.1:8787 'tsx src/client.ts'"
   },
   "dependencies": {
+    "@opentelemetry/api": "^1.9.0",
     "@trpc/client": "npm:@trpc/client",
     "@trpc/server": "npm:@trpc/server",
     "zod": "^4.2.1"
