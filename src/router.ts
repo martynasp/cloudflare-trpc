@@ -39,11 +39,8 @@ export const appRouter = router({
     return `hello ${input ?? 'world'}`;
   }),
   "": publicProcedure.input(z.string().nullish()).query(({ input }) => {
-    trace.getTracer('default').startActiveSpan('rootHandler', span => {
-      span.setAttribute('custom-attribute', 'custom-value');
-      console.log('Hello Input:', input);
-      span.end();
-    });
+    const sp = trace.getActiveSpan();
+    sp?.addEvent('root endpoint called');
     return `root`;
   }),
 });
