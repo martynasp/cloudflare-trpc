@@ -1,6 +1,6 @@
 import { initTRPC } from '@trpc/server';
+import { env } from 'cloudflare:workers';
 import { z } from 'zod';
-import { trace } from '@opentelemetry/api'
 
 let id = 0;
 
@@ -38,10 +38,10 @@ export const appRouter = router({
     console.log('Hello Input:', input);
     return `hello ${input ?? 'world'}`;
   }),
-  "": publicProcedure.input(z.string().nullish()).query(({ input }) => {
-    const sp = trace.getActiveSpan();
-    sp?.addEvent('root endpoint called');
-    return `root`;
+  "": publicProcedure.input(z.string().nullish()).query(async ({ input }) => {
+   const stmt = env.DB.prepare("SELECT * FROM comments LIMIT 3");
+		const { results } = await stmt.all();
+    return `root: ${input ?? 'world'}, comments: ${JSON.stringify(results)}`;
   }),
 });
 

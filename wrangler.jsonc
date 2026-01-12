@@ -4,6 +4,14 @@
   "main": "src/index.ts",
   "compatibility_date": "2025-05-05",
   "compatibility_flags": [ "nodejs_compat" ],
+  "upload_source_maps": true,
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_id": "f93e5bb8-6867-4b86-a7d0-1815e81548d5",
+			"database_name": "d1-template-database"
+		}
+	],
   "observability": {
     "logs": {
       "enabled": true,
